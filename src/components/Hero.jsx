@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Center } from '@react-three/drei';
+import { Headphones } from './Headphones'; // එකම ෆෝල්ඩර් එකේ නිසා පාත් එක වෙනස් වුණා
 
 export default function Hero() {
   useEffect(() => {
-    // Immersive Desktop Interactive Parallax Effect
+    // Desktop Interactive Parallax Effect
     if (window.innerWidth > 768) {
       const handleMouseMove = (e) => {
         const container = document.getElementById('3d-container');
@@ -25,7 +28,7 @@ export default function Hero() {
       {/* TopNavBar */}
       <nav className="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/5">
         <div className="flex justify-between items-center px-12 md:px-24 py-4 max-w-[1440px] mx-auto h-20">
-          <div className="font-['Montserrat'] text-2xl font-black tracking-tighter text-on-surface uppercase text-white">
+          <div className="font-['Montserrat'] text-2xl font-black tracking-tighter uppercase text-white">
             AeroSound X
           </div>
           <div className="hidden md:flex items-center space-x-12 font-['Inter'] text-xs font-semibold uppercase tracking-widest">
@@ -42,7 +45,7 @@ export default function Hero() {
       {/* Ambient Neon Glow Background */}
       <div className="absolute inset-0 pointer-events-none neon-radial-glow z-0"></div>
 
-      {/* Main Workspace (Layered Interface) */}
+      {/* Main Workspace */}
       <div className="w-full max-w-[1440px] mx-auto px-12 md:px-24 relative min-h-screen flex items-center">
         
         {/* 1. TEXT CONTENT LAYER */}
@@ -76,13 +79,23 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* 2. IMMERSIVE 3D/IMAGE CANVAS LAYER */}
+        {/* 2. REAL 3D CANVAS LAYER (නියම සිනමාටික් අත්දැකීම) */}
         <div className="absolute inset-y-0 right-0 w-full md:w-[60%] z-10 flex items-center justify-center md:justify-end" id="3d-viewport">
           <div className="relative w-full h-[85vh] max-w-3xl floating-model transition-transform duration-300 ease-out" id="3d-container">
             
-            <img className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_0_50px_rgba(0,240,255,0.15)]" 
-                 alt="Sleek charcoal headphones" 
-                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAalK7TYpDt8R1mmlH9sYeJHPFk0KkwBCc-l73doxo1SCUn-A7VJLY3XaH0jW8bAs2EA7K2DoQmRPeRrMksscBGzSAnCdWG40Xt6w-NusRyX0sWtR4ysbcjeTzwmORuxWK4N9FMW-Fak40M-eF7T5Ksz8b6o4gYITRYGpbfaJZ8-98BEs3RGSuDLnpp-tj4L3vrd6BkP0MUorLwVnMT7h188cxxxjwvDBFujn45iiLQsqwQoh2KrYhUHd_vBu8Yk4_O_mmJrFHhLHh0"/>
+            {/* මෙන්න මෙතනට තමයි ඔයාගේ Canvas එක බැස්සුවේ */}
+           <Canvas camera={{ position: [0, 0, 2.2], fov: 45 }}> {/* 1. කැමරාව 4.5 ඉඳන් 2.2 ට ළං කරා */}
+  <ambientLight intensity={1.8} />
+  <directionalLight position={[5, 5, 5]} intensity={2.5} />
+  <pointLight position={[-5, -5, -5]} intensity={1} />
+  
+  <Center>
+    {/* 2. Headphones එකට scale={3.8} ක් එකතු කරලා මොඩල් එක ලොකු කරා */}
+    <Headphones scale={20} /> 
+  </Center>
+  
+  <OrbitControls enableZoom={false} autoRotate={false} />
+</Canvas>
             
             {/* Hotspot 1: HiFi Driver */}
             <div className="absolute top-[38%] left-[32%] group cursor-pointer z-30">
