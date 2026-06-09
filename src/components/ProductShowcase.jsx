@@ -9,8 +9,10 @@ const PRODUCTS = [
     id: 1,
     name: "AeroSound X",
     price: "$349",
-    color: "Midnight Black",
-    modelPath: "/models/airpods_max.glb", // 💡 නිවැරදිම Folder Path එක දැම්මා
+    colorName: "Midnight Black",
+    hexColor: "#1A1A1A",
+    modelPath: "/models/airpods_max.glb",
+    thumb: "/images/black_thumb.png",
     gradient: "from-cyan-500 to-blue-600",
     desc: "The ultimate flagship experience with ANC 2.0."
   },
@@ -18,19 +20,45 @@ const PRODUCTS = [
     id: 2,
     name: "AeroSound Pro",
     price: "$299",
-    color: "Space Gray",
-    modelPath: "/models/airpods_max.glb", // 💡 වෙනත් .glb එකක් තියෙනවා නම් මෙතනට පාත් එක දෙන්න මචං
-    gradient: "from-purple-500 to-pink-600",
+    colorName: "Ocean Blue",
+    hexColor: "#1E3A8A",
+    modelPath: "/models/airpods_max.glb",
+    thumb: "/images/blue_thumb.png",
+    gradient: "from-blue-500 to-indigo-600",
     desc: "Professional grade audio for studio creators."
   },
   {
     id: 3,
     name: "AeroSound Lite",
     price: "$199",
-    color: "Arctic White",
-    modelPath: "/models/models/airpods_max.glb", // 💡 වෙනත් .glb එකක් තියෙනවා නම් මෙතනට පාත් එක දෙන්න මචං
+    colorName: "Arctic White",
+    hexColor: "#E5E7EB",
+    modelPath: "/models/airpods_max.glb",
+    thumb: "/images/white_thumb.png",
     gradient: "from-emerald-400 to-cyan-500",
     desc: "Lightweight design for all-day portability."
+  },
+  {
+    id: 4,
+    name: "AeroSound Ultra",
+    price: "$449",
+    colorName: "Sunset Pink",
+    hexColor: "#F43F5E", // Pink/Red ටින්ට් එකක්
+    modelPath: "/models/airpods_max.glb",
+    thumb: "/images/pink_thumb.png", // public/images/pink_thumb.png
+    gradient: "from-rose-500 to-orange-500",
+    desc: "Limited edition luxury crafted with premium materials."
+  },
+  {
+    id: 5,
+    name: "AeroSound Sport",
+    price: "$249",
+    colorName: "Neon Green",
+    hexColor: "#22C55E", // Green ටින්ට් එකක්
+    modelPath: "/models/airpods_max.glb",
+    thumb: "/images/green_thumb.png", // public/images/green_thumb.png
+    gradient: "from-green-400 to-teal-600",
+    desc: "Sweat-resistant design engineered for high-intensity athletes."
   }
 ];
 
@@ -73,7 +101,7 @@ export default function ProductShowcase() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* 👈 LEFT: PRODUCT DETAILS */}
+          {/* 👈 LEFT: PRODUCT DETAILS (Updates dynamically with selection) */}
           <div className="lg:col-span-4 z-20">
             <AnimatePresence mode='wait'>
               <motion.div
@@ -85,7 +113,9 @@ export default function ProductShowcase() {
                 className="space-y-8"
               >
                 <div>
-                  <h3 className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">Choose your aesthetic</h3>
+                  <h3 className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">
+                    Aesthetic / {selectedProduct.colorName}
+                  </h3>
                   <h2 className="text-4xl font-black text-white">{selectedProduct.name}</h2>
                 </div>
 
@@ -110,7 +140,7 @@ export default function ProductShowcase() {
             </AnimatePresence>
           </div>
 
-          {/* 🎯 MIDDLE: 3D MODEL VIEW */}
+          {/* 🎯 MIDDLE: DYNAMIC 3D MODEL VIEW */}
           <div className="lg:col-span-4 h-[500px] relative">
             <AnimatePresence mode="wait">
               <motion.div
@@ -125,8 +155,12 @@ export default function ProductShowcase() {
                   <ambientLight intensity={1.5} />
                   <directionalLight position={[5, 5, 5]} intensity={2} />
                   <Center>
-                    {/* 💡 Selected Product එකට අදාළ 3D Model Path එක pass කරයි */}
-                    <Headphones scale={4.5} modelPath={selectedProduct.modelPath} />
+                    {/* 💡 මෙතනදී modelPath එකයි hexColor එකයි දෙකම dynamic ව යනවා */}
+                    <Headphones 
+                      scale={4.5} 
+                      modelPath={selectedProduct.modelPath} 
+                      customColor={selectedProduct.hexColor}
+                    />
                   </Center>
                   <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
                 </Canvas>
@@ -134,37 +168,57 @@ export default function ProductShowcase() {
             </AnimatePresence>
           </div>
 
-          {/* 👉 RIGHT: CIRCULAR SELECTION */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-4">
-            <h3 className="text-[10px] font-mono text-gray-600 uppercase tracking-widest mb-8">Scroll & Select</h3>
+          {/* 👉 RIGHT: CIRCULAR / CARD SELECTION (SCROLLABLE VERSION) */}
+          <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-4 w-full">
+            <h3 className="text-[10px] font-mono text-gray-600 uppercase tracking-widest mb-2">Scroll & Select</h3>
             
-            <div className="relative flex flex-col items-center space-y-6">
+            {/* 💡 CRITICAL FIX: කාඩ්ස් ගොඩක් දාද්දි Scroll වෙන්න max-height එකක් සහ scrollbar styling දැම්මා */}
+            <div className="relative flex flex-col items-center space-y-6 max-h-[520px] overflow-y-auto overflow-x-hidden px-4 py-2 w-full custom-layout-scroll">
                {PRODUCTS.map((item, index) => (
                  <motion.div
                     key={item.id}
                     onClick={() => handleSelect(index)}
                     animate={{
-                        scale: activeIndex === index ? 1.2 : 0.8,
-                        opacity: activeIndex === index ? 1 : 0.3,
-                        x: activeIndex === index ? -20 : 0
+                        scale: activeIndex === index ? 1.08 : 0.9,
+                        opacity: activeIndex === index ? 1 : 0.4,
+                        x: activeIndex === index ? -8 : 0
                     }}
-                    whileHover={{ scale: 1.1, opacity: 1 }}
-                    className="cursor-pointer group flex items-center space-x-6"
+                    whileHover={{ scale: 1.02, opacity: 1 }}
+                    className="cursor-pointer group flex items-center space-x-6 w-full min-w-[260px] transition-all"
                  >
-                    <div className={`w-20 h-20 rounded-full border-2 p-1 transition-all ${activeIndex === index ? 'border-cyan-400' : 'border-white/10'}`}>
-                        <div className="w-full h-full bg-[#1A1A1A] rounded-full overflow-hidden flex items-center justify-center">
-                           <img src="/images/headphone_thumb.png" className="w-12 h-12 object-contain group-hover:scale-110 transition-transform" alt="thumb" />
+                    {/* Thumbnail Circle */}
+                    <div className={`w-28 h-28 rounded-full border-2 p-1.5 flex-shrink-0 transition-all duration-300 ${activeIndex === index ? 'border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' : 'border-white/10'}`}>
+                        <div className="w-full h-full bg-[#141414] rounded-full overflow-hidden flex items-center justify-center relative">
+                           <img 
+                             src={item.thumb} 
+                             className="w-20 h-20 object-contain group-hover:scale-110 transition-transform z-10" 
+                             alt={item.name}
+                             onError={(e) => { e.target.style.display = 'none'; }}
+                           />
+                           <div 
+                             className="absolute w-6 h-6 rounded-full blur-[4px] opacity-30" 
+                             style={{ backgroundColor: item.hexColor }} 
+                           />
                         </div>
                     </div>
-                    <div className={activeIndex === index ? 'block' : 'hidden md:block'}>
-                        <h4 className="font-bold uppercase text-[12px]">{item.name}</h4>
-                        <p className="text-[9px] text-gray-500 font-mono">{item.price}</p>
+                    
+                    {/* Text Details */}
+                    <div className="flex-grow">
+                        <h4 className="font-black uppercase text-[13px] tracking-wider text-white group-hover:text-cyan-400 transition-colors">
+                          {item.name}
+                        </h4>
+                        <p className="text-[11px] text-cyan-400/90 font-mono mt-0.5">
+                          {item.price}
+                        </p>
+                        <p className="text-[10px] text-gray-500 font-medium">
+                          {item.colorName}
+                        </p>
                     </div>
                  </motion.div>
                ))}
             </div>
 
-            <div className="w-[1px] h-32 bg-gradient-to-b from-cyan-400 to-transparent mt-12"></div>
+            <div className="w-[1px] h-16 bg-gradient-to-b from-cyan-400 to-transparent mt-6"></div>
           </div>
 
         </div>
