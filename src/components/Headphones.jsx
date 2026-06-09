@@ -1,19 +1,13 @@
 import React from 'react';
 import { useGLTF } from '@react-three/drei';
 
-export function Headphones() {
-  
-  const { scene } = useGLTF('/models/airpods_max.glb');
-  
+export function Headphones(props) {
+  const { scene } = useGLTF('/models/airpods_max.glb'); // GLTFLoader එකෙන් මේ මොඩලය ලෝඩ් කරලා තියෙනවා
 
   return (
     <primitive 
       object={scene} 
-      scale={1.8} 
-      position={[0, 0, 0]} 
+      {...props} // Hero.jsx එකෙන් එවන scale, position, rotation ඔක්කොම ඔටෝමැටිකලි මෙතනට ඇප්ලයි වෙනවා
     />
   );
 }
-
-
-useGLTF.preload('/models/airpods_max.glb');
