@@ -128,7 +128,7 @@ export default function Hero() {
               
               <Center>
                 {/* 💡 FIX: position={[0, -1, 0]} එක [0, -0.15, 0] ලෙස වෙනස් කර මැදට ගත්තා */}
-                <Headphones scale={4} position={[0, -0.2, 0]} modelPath="/models/airpods_max.glb" /> 
+                <Headphones scale={4} position={[0, 0, 0]} modelPath="/models/airpods_max.glb" /> 
               </Center>
               <OrbitControls enableZoom={false} autoRotate={false} />
             </Canvas>

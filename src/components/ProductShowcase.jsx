@@ -43,9 +43,9 @@ const PRODUCTS = [
     name: "AeroSound Ultra",
     price: "$449",
     colorName: "Sunset Pink",
-    hexColor: "#F43F5E", // Pink/Red ටින්ට් එකක්
+    hexColor: "#F43F5E",
     modelPath: "/models/airpods_max.glb",
-    thumb: "/images/pink_thumb.png", // public/images/pink_thumb.png
+    thumb: "/images/pink_thumb.png",
     gradient: "from-rose-500 to-orange-500",
     desc: "Limited edition luxury crafted with premium materials."
   },
@@ -54,9 +54,9 @@ const PRODUCTS = [
     name: "AeroSound Sport",
     price: "$249",
     colorName: "Neon Green",
-    hexColor: "#22C55E", // Green ටින්ට් එකක්
+    hexColor: "#22C55E",
     modelPath: "/models/airpods_max.glb",
-    thumb: "/images/green_thumb.png", // public/images/green_thumb.png
+    thumb: "/images/green_thumb.png",
     gradient: "from-green-400 to-teal-600",
     desc: "Sweat-resistant design engineered for high-intensity athletes."
   }
@@ -71,19 +71,29 @@ export default function ProductShowcase() {
     setSelectedProduct(PRODUCTS[index]);
   };
 
+  const nextSlide = () => {
+    const nextIndex = (activeIndex + 1) % PRODUCTS.length;
+    handleSelect(nextIndex);
+  };
+
+  const prevSlide = () => {
+    const prevIndex = (activeIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
+    handleSelect(prevIndex);
+  };
+
   return (
-    <div className="relative min-h-screen w-full bg-[#0B0B0B] text-white py-24 overflow-hidden">
+    <div className="relative min-h-screen w-full bg-[#0B0B0B] text-white py-20 overflow-hidden font-sans flex flex-col justify-between">
       
       {/* BACKGROUND GLOW DYNAMIC */}
-      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r ${selectedProduct.gradient} opacity-5 blur-[120px] transition-all duration-1000 rounded-full`} />
+      <div className={`absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r ${selectedProduct.gradient} opacity-[0.04] blur-[140px] transition-all duration-1000 rounded-full pointer-events-none`} />
 
-      <div className="max-w-[1440px] mx-auto px-12 md:px-24 h-full">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-24 w-full relative z-10 flex flex-col flex-grow justify-center">
         
-        {/* DYNAMIC SECTION TITLE */}
-        <div className="mb-16">
+        {/* 1. DYNAMIC SECTION TITLE */}
+        <div className="mb-8">
           <motion.span 
             key={selectedProduct.id + 'label'}
-            initial={{ opacity: 0, y: 20 }} 
+            initial={{ opacity: 0, y: 15 }} 
             animate={{ opacity: 1, y: 0 }}
             className="text-cyan-400 font-mono text-[10px] tracking-[0.4em] uppercase"
           >
@@ -91,137 +101,175 @@ export default function ProductShowcase() {
           </motion.span>
           <motion.h2 
             key={selectedProduct.id + 'title'}
-            initial={{ opacity: 0, x: -30 }} 
+            initial={{ opacity: 0, x: -20 }} 
             animate={{ opacity: 1, x: 0 }}
-            className="text-5xl font-black uppercase mt-2 tracking-tighter"
+            className="text-4xl md:text-5xl font-black uppercase mt-1 tracking-tighter"
           >
-            Explore the <br/> <span className="text-neutral-500">Collection.</span>
-          </motion.h2>
+            Explore the <span className="text-neutral-500">Collection.</span>
+         </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* 2. TOP ROW: DETAILS & 3D INTERACTIVE CANVAS */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[420px]">
           
-          {/* 👈 LEFT: PRODUCT DETAILS (Updates dynamically with selection) */}
-          <div className="lg:col-span-4 z-20">
+          {/* 👈 LEFT: PRODUCT DETAILS */}
+          <div className="lg:col-span-5 z-20">
             <AnimatePresence mode='wait'>
               <motion.div
                 key={selectedProduct.id}
-                initial={{ opacity: 0, x: -40 }}
+                initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.5, ease: "circOut" }}
-                className="space-y-8"
+                transition={{ duration: 0.4, ease: "circOut" }}
+                className="space-y-6"
               >
                 <div>
-                  <h3 className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">
+                  <h3 className="text-gray-500 uppercase text-[10px] font-bold tracking-widest mb-1">
                     Aesthetic / {selectedProduct.colorName}
                   </h3>
-                  <h2 className="text-4xl font-black text-white">{selectedProduct.name}</h2>
+                  <h2 className="text-4xl font-black text-white tracking-tight">{selectedProduct.name}</h2>
                 </div>
 
-                <div className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-xl">
+                <div className="bg-[#121212]/60 border border-white/5 p-6 rounded-2xl backdrop-blur-xl shadow-2xl">
                   <div className="flex justify-between items-end mb-4">
-                    <span className="text-3xl font-black">{selectedProduct.price}</span>
-                    <span className="text-[10px] text-gray-500 font-mono">INCL. TAXES</span>
+                    <span className="text-3xl font-black text-white tracking-tight">{selectedProduct.price}</span>
+                    <span className="text-[9px] text-gray-500 font-mono tracking-wider">INCL. TAXES</span>
                   </div>
                   <p className="text-gray-400 text-sm leading-relaxed mb-6">
                     {selectedProduct.desc}
                   </p>
-                  <button className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-cyan-400 transition-colors duration-300">
+                  <button className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-cyan-400 hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] transition-all duration-300">
                     Pre-Order Now
                   </button>
                 </div>
 
-                <div className="flex space-x-4 opacity-50">
-                    <div className="text-[9px] font-mono border-r border-white/20 pr-4">CATEGORY / WIRELESS</div>
-                    <div className="text-[9px] font-mono">PREMIUM PRODUCTION</div>
+                <div className="flex space-x-4 opacity-40">
+                  <div className="text-[9px] font-mono border-r border-white/20 pr-4">CATEGORY / WIRELESS</div>
+                  <div className="text-[9px] font-mono">PREMIUM PRODUCTION</div>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* 🎯 MIDDLE: DYNAMIC 3D MODEL VIEW */}
-          <div className="lg:col-span-4 h-[500px] relative">
+          {/* 🎯 RIGHT: INTERACTIVE 3D CANVAS (Now gets much bigger premium space) */}
+          <div className="lg:col-span-7 h-[450px] relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedProduct.id}
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
+                exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="w-full h-full"
               >
-                <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }}>
+                <Canvas camera={{ position: [0, 0, 2.3], fov: 45 }}>
                   <ambientLight intensity={1.5} />
                   <directionalLight position={[5, 5, 5]} intensity={2} />
                   <Center>
-                    {/* 💡 මෙතනදී modelPath එකයි hexColor එකයි දෙකම dynamic ව යනවා */}
                     <Headphones 
-                      scale={4.5} 
+                      scale={4.2} 
                       modelPath={selectedProduct.modelPath} 
                       customColor={selectedProduct.hexColor}
                     />
                   </Center>
-                  <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+                  <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.4} />
                 </Canvas>
               </motion.div>
             </AnimatePresence>
           </div>
+        </div>
 
-          {/* 👉 RIGHT: CIRCULAR / CARD SELECTION (SCROLLABLE VERSION) */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-4 w-full">
-            <h3 className="text-[10px] font-mono text-gray-600 uppercase tracking-widest mb-2">Scroll & Select</h3>
-            
-            {/* 💡 CRITICAL FIX: කාඩ්ස් ගොඩක් දාද්දි Scroll වෙන්න max-height එකක් සහ scrollbar styling දැම්මා */}
-            <div className="relative flex flex-col items-center space-y-6 max-h-[520px] overflow-y-auto overflow-x-hidden px-4 py-2 w-full custom-layout-scroll">
-               {PRODUCTS.map((item, index) => (
-                 <motion.div
-                    key={item.id}
-                    onClick={() => handleSelect(index)}
-                    animate={{
-                        scale: activeIndex === index ? 1.08 : 0.9,
-                        opacity: activeIndex === index ? 1 : 0.4,
-                        x: activeIndex === index ? -8 : 0
-                    }}
-                    whileHover={{ scale: 1.02, opacity: 1 }}
-                    className="cursor-pointer group flex items-center space-x-6 w-full min-w-[260px] transition-all"
-                 >
-                    {/* Thumbnail Circle */}
-                    <div className={`w-28 h-28 rounded-full border-2 p-1.5 flex-shrink-0 transition-all duration-300 ${activeIndex === index ? 'border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' : 'border-white/10'}`}>
-                        <div className="w-full h-full bg-[#141414] rounded-full overflow-hidden flex items-center justify-center relative">
-                           <img 
-                             src={item.thumb} 
-                             className="w-20 h-20 object-contain group-hover:scale-110 transition-transform z-10" 
-                             alt={item.name}
-                             onError={(e) => { e.target.style.display = 'none'; }}
-                           />
-                           <div 
-                             className="absolute w-6 h-6 rounded-full blur-[4px] opacity-30" 
-                             style={{ backgroundColor: item.hexColor }} 
-                           />
-                        </div>
-                    </div>
-                    
-                    {/* Text Details */}
-                    <div className="flex-grow">
-                        <h4 className="font-black uppercase text-[13px] tracking-wider text-white group-hover:text-cyan-400 transition-colors">
-                          {item.name}
-                        </h4>
-                        <p className="text-[11px] text-cyan-400/90 font-mono mt-0.5">
-                          {item.price}
-                        </p>
-                        <p className="text-[10px] text-gray-500 font-medium">
-                          {item.colorName}
-                        </p>
-                    </div>
-                 </motion.div>
-               ))}
-            </div>
+        {/* 🎡 3. BOTTOM ROW: THE 3D ARCH STACKED DECK (YOUR SKETCH LOGIC) */}
+        <div className="relative w-full flex flex-col items-center justify-center mt-12 pt-6">
+          
+          {/* Cards Container */}
+          <div className="relative w-full max-w-3xl h-[240px] flex items-center justify-center">
+            {PRODUCTS.map((item, index) => {
+              // Calculate arch positioning based on active index
+              let offset = index - activeIndex;
+              if (offset > PRODUCTS.length / 2) offset -= PRODUCTS.length;
+              if (offset < -PRODUCTS.length / 2) offset += PRODUCTS.length;
 
-            <div className="w-[1px] h-16 bg-gradient-to-b from-cyan-400 to-transparent mt-6"></div>
+              const absOffset = Math.abs(offset);
+              
+              // 📐 SKETCH MATH LOGIC: Center card is lower, side cards go UP and away
+              const translateX = offset * 160; 
+              const translateY = absOffset * -18; // Negative values make it curve UP into an Arch exactly like your sketch!
+              const scale = 1 - absOffset * 0.12; 
+              const rotate = offset * 5; 
+              const zIndex = 10 - absOffset; 
+              const opacity = 1 - absOffset * 0.35; 
+
+              const isActive = index === activeIndex;
+
+              return (
+                <motion.div
+                  key={item.id}
+                  onClick={() => handleSelect(index)}
+                  animate={{
+                    x: translateX,
+                    y: translateY,
+                    scale: scale,
+                    rotate: rotate,
+                    zIndex: zIndex,
+                    opacity: opacity
+                  }}
+                  whileHover={!isActive ? { scale: scale + 0.03, opacity: 1 } : {}}
+                  transition={{ type: "spring", stiffness: 260, damping: 25 }}
+                  className={`absolute w-[160px] h-[210px] rounded-2xl p-4 cursor-pointer select-none border backdrop-blur-xl flex flex-col justify-between transition-colors duration-300 ${
+                    isActive 
+                      ? 'bg-[#141414]/90 border-cyan-500/40 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),0_0_25px_rgba(34,211,238,0.1)]' 
+                      : 'bg-[#141414]/30 border-white/5 shadow-xl'
+                  }`}
+                >
+                  {/* Card Header */}
+                  <div className="flex justify-between items-start">
+                    <span className="font-mono text-[9px] text-neutral-500 font-bold">0{item.id}</span>
+                    <div className="w-2.5 h-2.5 rounded-full border border-white/10" style={{ backgroundColor: item.hexColor }} />
+                  </div>
+
+                  {/* Rectangular Image Wrapper (Premium Glass Look - No ugly circles!) */}
+                  <div className="my-2 flex-grow flex items-center justify-center relative rounded-lg overflow-hidden bg-white/[0.01] p-2 border border-white/[0.02]">
+                    <img 
+                      src={item.thumb} 
+                      alt={item.name}
+                      className={`w-full h-full object-contain transition-transform duration-500 ${isActive ? 'scale-110' : 'scale-95'}`}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="flex justify-between items-end">
+                    <div className="truncate pr-1">
+                      <h4 className={`font-black uppercase text-[10px] tracking-wider truncate ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>
+                        {item.name}
+                      </h4>
+                      <p className="text-[8px] text-neutral-500 font-mono mt-0.5">{item.price}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* 🏹 SKETCH NAVIGATION ARROWS */}
+          <div className="flex space-x-4 mt-4 z-30">
+            <button 
+              onClick={prevSlide}
+              className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center hover:border-cyan-400 hover:bg-cyan-500/10 active:scale-95 transition-all group"
+            >
+              <span className="text-white group-hover:text-cyan-400 text-sm font-bold transition-colors">←</span>
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center hover:border-cyan-400 hover:bg-cyan-500/10 active:scale-95 transition-all group"
+            >
+              <span className="text-white group-hover:text-cyan-400 text-sm font-bold transition-colors">→</span>
+            </button>
           </div>
 
         </div>
+
       </div>
     </div>
   );
