@@ -3,25 +3,24 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export function Headphones({ modelPath = '/models/airpods_max.glb', customColor, ...props }) {
+export function Headphones({ modelPath, customColor, ...props }) {
+  // 💡 වෙනස් වෙන modelPath එක අනුව 3D file එක මෙතනින් load වෙනවා
   const { scene } = useGLTF(
     modelPath, 
-    'https://www.gstatic.com/draco/versioned/decoders/1.5.7/'
+    'https://www.gstatic.com/draco/versioned/decoders/1.5.7/' // Draco compression decoder එක
   );
   
-  // 🎯 CRITICAL FIX: එකම මොඩල් එක තැන් කිහිපයක රෙන්ඩර් වීමේ ගැටලුව සහ ඩයිනමික් කලර්ස් ෆික්ස් එක
+  // 🎯 හැම මොඩල් එකක්ම ක්ලීන් එකට memory එකේ clone වෙලා පේන්න
   const clonedScene = useMemo(() => {
     const clone = scene.clone();
     
     if (customColor) {
       clone.traverse((child) => {
         if (child.isMesh) {
-          // හෙඩ්ෆෝන් එකේ ප්‍රධාන කන් දෙකට (Earcups/Body) අදාළ මැටීරියල් එක විතරක් පාට කරන්න
-          // සාමාන්‍යයෙන් AirPods මොඩල් එකේ ප්‍රධාන කොටස් වල මැටීරියල් නම body හෝ earcup වගේ වෙනවා.
-          // ඔක්කොම එකම පාටක් වෙන්නේ නැතුව ලස්සනට බ්ලෙන්ඩ් වෙන්න මෙහෙම ටින්ට් කරමු:
+          // අවශ්‍ය නම් hexColor එකෙන් පොඩි ටින්ට් එකක් මෙතනින් මැටීරියල් එකට දාන්න පුළුවන්
           if (child.material && !child.name.includes('chrome') && !child.name.includes('glass')) {
-            child.material = child.material.clone(); // Clone material to avoid modifying other instances
-            child.material.color = new THREE.Color(customColor);
+            child.material = child.material.clone(); 
+            // child.material.color = new THREE.Color(customColor); // 👈 ඔරිජිනල් මොඩල් කලර්ස්ම ඕන නම් මේ ලයින් එක කමෙන්ට් කරලා තියන්න මචං
           }
         }
       });
@@ -36,7 +35,7 @@ export function Headphones({ modelPath = '/models/airpods_max.glb', customColor,
     const t = state.clock.getElapsedTime();
     if (modelRef.current) {
       modelRef.current.rotation.y = t * 0.2; 
-      modelRef.current.position.y = Math.sin(t) * 0.12; 
+      modelRef.current.position.y = Math.sin(t) * 0.08; 
     }
   });
 
@@ -50,7 +49,9 @@ export function Headphones({ modelPath = '/models/airpods_max.glb', customColor,
   );
 }
 
-useGLTF.preload(
-  '/models/airpods_max.glb', 
-  'https://www.gstatic.com/draco/versioned/decoders/1.5.7/'
-);
+// 🚀 PRELOAD ALL 5 MODELS: සයිට් එක ලෝඩ් වෙද්දීම මොඩල් පහම බැක්ග්‍රවුන්ඩ් එකේ ලෝඩ් කරගන්නවා (කාඩ් ක්ලික් කරද්දී පටස් ගාලා මාරු වෙන්න)
+useGLTF.preload('/models/aerosound_x.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+useGLTF.preload('/models/aerosound_pro.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+useGLTF.preload('/models/aerosound_lite.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+useGLTF.preload('/models/aerosound_ultra.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+useGLTF.preload('/models/aerosound_sport.glb', 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');

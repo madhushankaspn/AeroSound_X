@@ -11,7 +11,9 @@ const PRODUCTS = [
     price: "$349",
     colorName: "Midnight Black",
     hexColor: "#1A1A1A",
-    modelPath: "/models/airpods_max.glb",
+    modelPath: "/models/aerosound_x.glb", // 👈 ඔයා හදන පළවෙනි මොඩල් එකේ path එක
+    scale: 4.2,                          // 👈 මේ මොඩල් එකට ගැලපෙන scale එක
+    position: [0, 0, 0],
     thumb: "/images/black_thumb.png",
     gradient: "from-cyan-500 to-blue-600",
     desc: "The ultimate flagship experience with ANC 2.0."
@@ -22,7 +24,9 @@ const PRODUCTS = [
     price: "$299",
     colorName: "Ocean Blue",
     hexColor: "#1E3A8A",
-    modelPath: "/models/airpods_max.glb",
+    modelPath: "/models/aerosound_pro.glb", // 👈 දෙවැනි මොඩල් එක
+    scale: 4.0,
+    position: [0, -0.05, 0],
     thumb: "/images/blue_thumb.png",
     gradient: "from-blue-500 to-indigo-600",
     desc: "Professional grade audio for studio creators."
@@ -33,7 +37,9 @@ const PRODUCTS = [
     price: "$199",
     colorName: "Arctic White",
     hexColor: "#E5E7EB",
-    modelPath: "/models/airpods_max.glb",
+    modelPath: "/models/aerosound_lite.glb", // 👈 තුන්වැනි මොඩල් එක
+    scale: 4.5,
+    position: [0, 0, 0],
     thumb: "/images/white_thumb.png",
     gradient: "from-emerald-400 to-cyan-500",
     desc: "Lightweight design for all-day portability."
@@ -44,7 +50,9 @@ const PRODUCTS = [
     price: "$449",
     colorName: "Sunset Pink",
     hexColor: "#F43F5E",
-    modelPath: "/models/airpods_max.glb",
+    modelPath: "/models/aerosound_ultra.glb", // 👈 හතරවැනි මොඩල් එක
+    scale: 4.2,
+    position: [0, 0.05, 0],
     thumb: "/images/pink_thumb.png",
     gradient: "from-rose-500 to-orange-500",
     desc: "Limited edition luxury crafted with premium materials."
@@ -55,7 +63,9 @@ const PRODUCTS = [
     price: "$249",
     colorName: "Neon Green",
     hexColor: "#22C55E",
-    modelPath: "/models/airpods_max.glb",
+    modelPath: "/models/aerosound_sport.glb", // 👈 පස්වැනි මොඩල් එක
+    scale: 4.1,
+    position: [0, 0, 0],
     thumb: "/images/green_thumb.png",
     gradient: "from-green-400 to-teal-600",
     desc: "Sweat-resistant design engineered for high-intensity athletes."
@@ -106,7 +116,7 @@ export default function ProductShowcase() {
             className="text-4xl md:text-5xl font-black uppercase mt-1 tracking-tighter"
           >
             Explore the <span className="text-neutral-500">Collection.</span>
-         </motion.h2>
+          </motion.h2>
         </div>
 
         {/* 2. TOP ROW: DETAILS & 3D INTERACTIVE CANVAS */}
@@ -151,7 +161,7 @@ export default function ProductShowcase() {
             </AnimatePresence>
           </div>
 
-          {/* 🎯 RIGHT: INTERACTIVE 3D CANVAS (Now gets much bigger premium space) */}
+          {/* 🎯 RIGHT: INTERACTIVE 3D CANVAS */}
           <div className="lg:col-span-7 h-[450px] relative">
             <AnimatePresence mode="wait">
               <motion.div
@@ -165,9 +175,13 @@ export default function ProductShowcase() {
                 <Canvas camera={{ position: [0, 0, 2.3], fov: 45 }}>
                   <ambientLight intensity={1.5} />
                   <directionalLight position={[5, 5, 5]} intensity={2} />
+                  <directionalLight position={[-5, 3, -4]} intensity={1.5} color="#ffffff" />
                   <Center>
+                    {/* 💡 key={selectedProduct.id} එක හින්දා කාඩ් මාරු වෙද්දී අලුත් මොඩල් එක ක්ලීන් එකට ලෝඩ් වෙනවා */}
                     <Headphones 
-                      scale={4.2} 
+                      key={selectedProduct.id} 
+                      scale={selectedProduct.scale} 
+                      position={selectedProduct.position}
                       modelPath={selectedProduct.modelPath} 
                       customColor={selectedProduct.hexColor}
                     />
@@ -179,22 +193,20 @@ export default function ProductShowcase() {
           </div>
         </div>
 
-        {/* 🎡 3. BOTTOM ROW: THE 3D ARCH STACKED DECK (YOUR SKETCH LOGIC) */}
+        {/* 🎡 3. BOTTOM ROW: THE 3D ARCH STACKED DECK */}
         <div className="relative w-full flex flex-col items-center justify-center mt-12 pt-6">
           
           {/* Cards Container */}
           <div className="relative w-full max-w-3xl h-[240px] flex items-center justify-center">
             {PRODUCTS.map((item, index) => {
-              // Calculate arch positioning based on active index
               let offset = index - activeIndex;
               if (offset > PRODUCTS.length / 2) offset -= PRODUCTS.length;
               if (offset < -PRODUCTS.length / 2) offset += PRODUCTS.length;
 
               const absOffset = Math.abs(offset);
               
-              // 📐 SKETCH MATH LOGIC: Center card is lower, side cards go UP and away
               const translateX = offset * 160; 
-              const translateY = absOffset * -18; // Negative values make it curve UP into an Arch exactly like your sketch!
+              const translateY = absOffset * -18; 
               const scale = 1 - absOffset * 0.12; 
               const rotate = offset * 5; 
               const zIndex = 10 - absOffset; 
@@ -228,7 +240,7 @@ export default function ProductShowcase() {
                     <div className="w-2.5 h-2.5 rounded-full border border-white/10" style={{ backgroundColor: item.hexColor }} />
                   </div>
 
-                  {/* Rectangular Image Wrapper (Premium Glass Look - No ugly circles!) */}
+                  {/* Rectangular Image Wrapper */}
                   <div className="my-2 flex-grow flex items-center justify-center relative rounded-lg overflow-hidden bg-white/[0.01] p-2 border border-white/[0.02]">
                     <img 
                       src={item.thumb} 
@@ -252,7 +264,7 @@ export default function ProductShowcase() {
             })}
           </div>
 
-          {/* 🏹 SKETCH NAVIGATION ARROWS */}
+          {/* SKETCH NAVIGATION ARROWS */}
           <div className="flex space-x-4 mt-4 z-30">
             <button 
               onClick={prevSlide}

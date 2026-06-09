@@ -86,7 +86,34 @@ export default function Hero() {
         </div>
       </nav>
 
+      {/* Ambient Radial Glow */}
       <div className="absolute inset-0 pointer-events-none neon-radial-glow z-0"></div>
+
+      {/* 🌐 NEW: PREMIUM TECH BACKGROUND GRID & BLUEPRINT ACCENTS */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        
+        {/* A. Subtle Tech Grid Pattern (Fades out beautifully towards edges) */}
+        <div 
+          className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_60%_at_65%_50%,#000_50%,transparent_100%)]" 
+        />
+
+        {/* B. Orbiting Blueprint Circles (Placed perfectly behind the 3D Container) */}
+        <div className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] border border-white/[0.01] rounded-full" />
+        
+        <div 
+          className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] border border-dashed border-cyan-500/[0.025] rounded-full animate-[spin_240s_linear_infinite]" 
+        />
+        
+        <div className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border border-white/[0.015] rounded-full" />
+
+        {/* C. Minimal Tech Data Overlay */}
+        <div className="absolute top-1/4 left-12 text-white/[0.02] font-mono text-[9px] tracking-widest select-none uppercase hidden lg:block">
+          + 00.12 X_COORD
+        </div>
+        <div className="absolute bottom-1/3 left-12 text-white/[0.02] font-mono text-[9px] tracking-widest select-none uppercase hidden lg:block">
+          SYS_AERO_INITIALIZED //
+        </div>
+      </div>
 
       {/* Main Workspace */}
       <div className="w-full max-w-[1440px] mx-auto px-12 md:px-24 relative min-h-screen flex items-center">
@@ -127,13 +154,12 @@ export default function Hero() {
               <pointLight position={[-5, -5, -5]} intensity={1} />
               
               <Center>
-                {/* 💡 FIX: position={[0, -1, 0]} එක [0, -0.15, 0] ලෙස වෙනස් කර මැදට ගත්තා */}
                 <Headphones scale={4} position={[0, 0, 0]} modelPath="/models/airpods_max.glb" /> 
               </Center>
               <OrbitControls enableZoom={false} autoRotate={false} />
             </Canvas>
             
-            {/* HOTSPOTS (ලස්සනට හෙඩ්ෆෝන් එකට සෙට් වෙන විදිහට තියෙනවා) */}
+            {/* HOTSPOTS */}
             <div className="absolute top-[62%] left-[28%] group cursor-pointer z-30">
               <div className="w-5 h-5 bg-cyan-400 rounded-full relative flex items-center justify-center border-2 border-white">
                 <div className="absolute inset-0 bg-cyan-400 rounded-full pulse-effect"></div>
@@ -157,6 +183,7 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* Footer Info Accent */}
         <div className="absolute bottom-10 right-12 md:right-24 flex flex-col items-end space-y-1 opacity-40 z-20">
           <span className="font-['Inter'] text-[10px] font-bold tracking-[0.2em] text-white uppercase">Aero-001-X-Series</span>
           <span className="font-['Inter'] text-[9px] text-neutral-400 tracking-widest">48.2343° N, 16.3731° E</span>
