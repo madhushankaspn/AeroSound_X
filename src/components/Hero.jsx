@@ -72,23 +72,49 @@ export default function Hero({ onPreOrderClick }) {
       )}
 
       {/* TopNavBar */}
-      <nav className="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/5">
-        <div className="flex justify-between items-center px-12 md:px-24 py-4 max-w-[1440px] mx-auto h-20">
-          <div className="font-['Montserrat'] text-2xl font-black tracking-tighter uppercase text-white">AeroSound X</div>
-          <div className="hidden md:flex items-center space-x-12 font-['Inter'] text-xs font-semibold uppercase tracking-widest">
-            <a className="text-white border-b-2 border-cyan-400 pb-1 hover:text-cyan-300 transition-all duration-300" href="#">Features</a>
-            <a className="text-white/60 hover:text-white transition-all duration-300" href="#">Tech Specs</a>
-            <a className="text-white/60 hover:text-white transition-all duration-300" href="#">Reviews</a>
-          </div>
-          {/* 💡 2. NAVBAR PRE-ORDER BUTTON: onClick එකට functional prop එක දුන්නා */}
-          <button 
-            onClick={onPreOrderClick}
-            className="bg-white text-black px-8 py-3 font-['Inter'] text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300 rounded-full electric-glow"
-          >
-            Pre-Order
-          </button>
-        </div>
-      </nav>
+      {/* TopNavBar */}
+<nav className="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/5">
+  <div className="flex justify-between items-center px-12 md:px-24 py-4 max-w-[1440px] mx-auto h-20">
+    
+    {/* LOGO */}
+    <div className="font-['Montserrat'] text-2xl font-black tracking-tighter uppercase text-white">
+      AeroSound X
+    </div>
+    
+    {/* ─── NEW SHOPPING-FOCUSED NAV LINKS START ─── */}
+    <div className="hidden md:flex items-center space-x-12 font-['Inter'] text-xs font-semibold uppercase tracking-widest">
+      
+      {/* 1. EXPLORE LINK (Active State) */}
+      <a className="text-white border-b-2 border-cyan-400 pb-1 hover:text-cyan-300 transition-all duration-300" href="#explore">
+        Explore
+      </a>
+      
+      {/* 2. COLLECTIONS BUTTON (Scrolls down to your Product Showcase) */}
+      <button 
+        onClick={onPreOrderClick}
+        className="text-white/60 hover:text-white font-semibold uppercase tracking-widest transition-all duration-300 bg-transparent border-none cursor-pointer"
+      >
+        Collections
+      </button>
+      
+      {/* 3. REVIEWS LINK */}
+      <a className="text-white/60 hover:text-white transition-all duration-300" href="#reviews">
+        Reviews
+      </a>
+      
+    </div>
+    {/* ─── NEW SHOPPING-FOCUSED NAV LINKS END ─── */}
+
+    {/* NAVBAR PRE-ORDER BUTTON */}
+    <button 
+      onClick={onPreOrderClick}
+      className="bg-white text-black px-8 py-3 font-['Inter'] text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300 rounded-full electric-glow"
+    >
+      Pre-Order
+    </button>
+
+  </div>
+</nav>
 
       {/* Ambient Radial Glow */}
       <div className="absolute inset-0 pointer-events-none neon-radial-glow z-0"></div>
