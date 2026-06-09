@@ -27,15 +27,19 @@ export default function Hero() {
     }
   }, [visualProgress, actualProgress]);
 
-  // Mouse Move 3D Parallax Effect
+  // 🖱️ Smooth Mouse Move 3D Parallax Effect
   useEffect(() => {
     if (window.innerWidth > 768) {
       const handleMouseMove = (e) => {
         const container = document.getElementById('3d-container');
-        const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
-        const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+        
+        // 💡 FIX: Divisor එක 30 සිට 70 දක්වා වැඩි කළා (වේගය සහ ගැස්සීම අඩු කරන්න)
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 70;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 70;
+        
         if (container) {
-          container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateX(${xAxis * 0.5}px)`;
+          // translateX එකත් 0.5 සිට 0.2 දක්වා අඩු කළා motion එක subtle කරන්න
+          container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateX(${xAxis * 0.2}px)`;
         }
       };
       document.addEventListener('mousemove', handleMouseMove);
@@ -123,12 +127,13 @@ export default function Hero() {
               <pointLight position={[-5, -5, -5]} intensity={1} />
               
               <Center>
-                <Headphones scale={4} position={[0, -1, 0]} modelPath="/models/airpods_max.glb" /> 
+                {/* 💡 FIX: position={[0, -1, 0]} එක [0, -0.15, 0] ලෙස වෙනස් කර මැදට ගත්තා */}
+                <Headphones scale={4} position={[0, -0.2, 0]} modelPath="/models/airpods_max.glb" /> 
               </Center>
               <OrbitControls enableZoom={false} autoRotate={false} />
             </Canvas>
             
-            {/* HOTSPOTS */}
+            {/* HOTSPOTS (ලස්සනට හෙඩ්ෆෝන් එකට සෙට් වෙන විදිහට තියෙනවා) */}
             <div className="absolute top-[62%] left-[28%] group cursor-pointer z-30">
               <div className="w-5 h-5 bg-cyan-400 rounded-full relative flex items-center justify-center border-2 border-white">
                 <div className="absolute inset-0 bg-cyan-400 rounded-full pulse-effect"></div>
