@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Center } from '@react-three/drei';
-import { Headphones } from './Headphones'; // එකම ෆෝල්ඩර් එකේ නිසා පාත් එක වෙනස් වුණා
+import { Headphones } from './Headphones'; 
 
 export default function Hero() {
   useEffect(() => {
@@ -79,41 +79,45 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* 2. REAL 3D CANVAS LAYER (නියම සිනමාටික් අත්දැකීම) */}
+        {/* 2. REAL 3D CANVAS LAYER */}
         <div className="absolute inset-y-0 right-0 w-full md:w-[60%] z-10 flex items-center justify-center md:justify-end" id="3d-viewport">
           <div className="relative w-full h-[85vh] max-w-3xl floating-model transition-transform duration-300 ease-out" id="3d-container">
             
-            {/* මෙන්න මෙතනට තමයි ඔයාගේ Canvas එක බැස්සුවේ */}
-           <Canvas camera={{ position: [0, 0, 2.2], fov: 45 }}> {/* 1. කැමරාව 4.5 ඉඳන් 2.2 ට ළං කරා */}
-  <ambientLight intensity={1.8} />
-  <directionalLight position={[5, 5, 5]} intensity={2.5} />
-  <pointLight position={[-5, -5, -5]} intensity={1} />
-  
-  <Center>
-    {/* 2. Headphones එකට scale={3.8} ක් එකතු කරලා මොඩල් එක ලොකු කරා */}
-    <Headphones scale={5} position={[0, -0.2, 0]}/> 
-  </Center>
-  
-  <OrbitControls enableZoom={false} autoRotate={false} />
-</Canvas>
+            {/* CANVAS WITH UPDATED LIGHTING */}
+            <Canvas camera={{ position: [0, 0, 2.2], fov: 45 }}>
+              <ambientLight intensity={1.2} /> {/* සාමාන්‍ය එළිය පොඩ්ඩක් අඩු කලා Shadow depth ගන්න */}
+              <directionalLight position={[5, 5, 5]} intensity={2.5} />
+              
+              {/* 💡 RIM LIGHT: හෙඩ්ෆෝන් එකේ දාර කැපිලා පේන්න පිටිපස්සෙන් දාපු ලයිට් එක */}
+              <directionalLight position={[-5, 3, -4]} intensity={3.5} color="#ffffff" />
+              <pointLight position={[-5, -5, -5]} intensity={1} />
+              
+              <Center>
+                <Headphones scale={5} position={[0, -0.35, 0]}/> 
+              </Center>
+              
+              <OrbitControls enableZoom={false} autoRotate={false} />
+            </Canvas>
             
-            {/* Hotspot 1: HiFi Driver */}
-            <div className="absolute top-[38%] left-[32%] group cursor-pointer z-30">
+            {/* 🎯 ADJUSTED HOTSPOTS TO MATCH THE LARGER MODEL */}
+            
+            {/* Hotspot 1: HiFi Driver (Left Ear Cup එක උඩට එන්න සෙට් කලා) */}
+            <div className="absolute top-[62%] left-[28%] group cursor-pointer z-30">
               <div className="w-5 h-5 bg-cyan-400 rounded-full relative flex items-center justify-center border-2 border-white">
                 <div className="absolute inset-0 bg-cyan-400 rounded-full pulse-effect"></div>
               </div>
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-56 p-4 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-300 shadow-2xl">
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-56 p-4 bg-black/90 backdrop-blur-xl border border-white/10 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-300 shadow-2xl z-50">
                 <span className="block font-['Inter'] text-xs font-bold text-cyan-400 mb-1 uppercase tracking-wider">HIFI DRIVER</span>
                 <span className="block font-['Inter'] text-xs text-neutral-400 leading-normal">40mm Beryllium coated diaphragms for unmatched acoustic clarity.</span>
               </div>
             </div>
 
-            {/* Hotspot 2: ANC 2.0 */}
-            <div className="absolute bottom-[35%] right-[24%] group cursor-pointer z-30">
+            {/* Hotspot 2: ANC 2.0 (Right Ear Cup එක උඩට එන්න සෙට් කලා) */}
+            <div className="absolute top-[55%] right-[42%] group cursor-pointer z-30">
               <div className="w-5 h-5 bg-cyan-400 rounded-full relative flex items-center justify-center border-2 border-white">
                 <div className="absolute inset-0 bg-cyan-400 rounded-full pulse-effect"></div>
               </div>
-              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-56 p-4 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-300 shadow-2xl">
+              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-56 p-4 bg-black/90 backdrop-blur-xl border border-white/10 rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-300 shadow-2xl z-50">
                 <span className="block font-['Inter'] text-xs font-bold text-cyan-400 mb-1 uppercase tracking-wider">ANC 2.0</span>
                 <span className="block font-['Inter'] text-xs text-neutral-400 leading-normal">Adaptive noise cancellation monitoring surroundings at 48,000Hz.</span>
               </div>
