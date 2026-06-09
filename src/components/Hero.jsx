@@ -91,7 +91,7 @@ export default function Hero() {
   
   <Center>
     {/* 2. Headphones එකට scale={3.8} ක් එකතු කරලා මොඩල් එක ලොකු කරා */}
-    <Headphones scale={5} position={[0, -0.18, 0]}/> 
+    <Headphones scale={5} position={[0, -0.2, 0]}/> 
   </Center>
   
   <OrbitControls enableZoom={false} autoRotate={false} />
