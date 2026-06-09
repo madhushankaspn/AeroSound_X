@@ -3,7 +3,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Center, useProgress } from '@react-three/drei'; 
 import { Headphones } from './Headphones'; 
 
-export default function Hero() {
+// 💡 1. මෙතනට onPreOrderClick කියන prop එක ගත්තා
+export default function Hero({ onPreOrderClick }) {
   const { progress: actualProgress } = useProgress();
   const [visualProgress, setVisualProgress] = useState(0);
   const [showLoader, setShowLoader] = useState(true);
@@ -32,13 +33,10 @@ export default function Hero() {
     if (window.innerWidth > 768) {
       const handleMouseMove = (e) => {
         const container = document.getElementById('3d-container');
-        
-        // 💡 FIX: Divisor එක 30 සිට 70 දක්වා වැඩි කළා (වේගය සහ ගැස්සීම අඩු කරන්න)
         const xAxis = (window.innerWidth / 2 - e.pageX) / 70;
         const yAxis = (window.innerHeight / 2 - e.pageY) / 70;
         
         if (container) {
-          // translateX එකත් 0.5 සිට 0.2 දක්වා අඩු කළා motion එක subtle කරන්න
           container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateX(${xAxis * 0.2}px)`;
         }
       };
@@ -82,37 +80,27 @@ export default function Hero() {
             <a className="text-white/60 hover:text-white transition-all duration-300" href="#">Tech Specs</a>
             <a className="text-white/60 hover:text-white transition-all duration-300" href="#">Reviews</a>
           </div>
-          <button className="bg-white text-black px-8 py-3 font-['Inter'] text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300 rounded-full electric-glow">Pre-Order</button>
+          {/* 💡 2. NAVBAR PRE-ORDER BUTTON: onClick එකට functional prop එක දුන්නා */}
+          <button 
+            onClick={onPreOrderClick}
+            className="bg-white text-black px-8 py-3 font-['Inter'] text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300 rounded-full electric-glow"
+          >
+            Pre-Order
+          </button>
         </div>
       </nav>
 
       {/* Ambient Radial Glow */}
       <div className="absolute inset-0 pointer-events-none neon-radial-glow z-0"></div>
 
-      {/* 🌐 NEW: PREMIUM TECH BACKGROUND GRID & BLUEPRINT ACCENTS */}
+      {/* PREMIUM TECH BACKGROUND GRID */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        
-        {/* A. Subtle Tech Grid Pattern (Fades out beautifully towards edges) */}
-        <div 
-          className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_60%_at_65%_50%,#000_50%,transparent_100%)]" 
-        />
-
-        {/* B. Orbiting Blueprint Circles (Placed perfectly behind the 3D Container) */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_60%_60%_at_65%_50%,#000_50%,transparent_100%)]" />
         <div className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] border border-white/[0.01] rounded-full" />
-        
-        <div 
-          className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] border border-dashed border-cyan-500/[0.025] rounded-full animate-[spin_240s_linear_infinite]" 
-        />
-        
+        <div className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] border border-dashed border-cyan-500/[0.025] rounded-full animate-[spin_240s_linear_infinite]" />
         <div className="absolute top-1/2 md:left-[70%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border border-white/[0.015] rounded-full" />
-
-        {/* C. Minimal Tech Data Overlay */}
-        <div className="absolute top-1/4 left-12 text-white/[0.02] font-mono text-[9px] tracking-widest select-none uppercase hidden lg:block">
-          + 00.12 X_COORD
-        </div>
-        <div className="absolute bottom-1/3 left-12 text-white/[0.02] font-mono text-[9px] tracking-widest select-none uppercase hidden lg:block">
-          SYS_AERO_INITIALIZED //
-        </div>
+        <div className="absolute top-1/4 left-12 text-white/[0.02] font-mono text-[9px] tracking-widest select-none uppercase hidden lg:block">+ 00.12 X_COORD</div>
+        <div className="absolute bottom-1/3 left-12 text-white/[0.02] font-mono text-[9px] tracking-widest select-none uppercase hidden lg:block">SYS_AERO_INITIALIZED //</div>
       </div>
 
       {/* Main Workspace */}
@@ -133,7 +121,13 @@ export default function Hero() {
             Experience the next frontier of acoustic precision with the AeroSound X. Engineered with proprietary haptic drivers and adaptive ANC 2.0.
           </p>
           <div className="flex items-center space-x-6 pt-10 pointer-events-auto animate-text-reveal delay-300">
-            <button className="bg-white text-black px-10 py-5 font-['Inter'] text-xs font-bold uppercase tracking-[0.15em] hover:scale-105 transition-all duration-300 rounded-full electric-glow">Discover Specs</button>
+            {/* 💡 3. HERO CONTENT BUTTON: මේක ක්ලික් කරාමත් Showcase එකට Scroll වෙන්න onClick එක දුන්නා */}
+            <button 
+              onClick={onPreOrderClick}
+              className="bg-white text-black px-10 py-5 font-['Inter'] text-xs font-bold uppercase tracking-[0.15em] hover:scale-105 transition-all duration-300 rounded-full electric-glow"
+            >
+              Discover Specs
+            </button>
             <div className="relative flex items-center group cursor-pointer">
               <div className="w-14 h-14 rounded-full border border-white/10 bg-white/5 backdrop-blur-md flex items-center justify-center group-hover:border-cyan-400 group-hover:bg-cyan-500/10 transition-all duration-300">
                 <span className="material-symbols-outlined text-white group-hover:text-cyan-400 transition-colors">play_arrow</span>
@@ -146,15 +140,13 @@ export default function Hero() {
         {/* 3D CANVAS LAYER */}
         <div className="absolute inset-y-0 right-0 w-full md:w-[60%] z-10 flex items-center justify-center md:justify-end" id="3d-viewport">
           <div className="relative w-full h-[85vh] max-w-3xl floating-model transition-transform duration-300 ease-out" id="3d-container">
-            
             <Canvas camera={{ position: [0, 0, 2.2], fov: 45 }}>
               <ambientLight intensity={1.2} /> 
               <directionalLight position={[5, 5, 5]} intensity={2.5} />
               <directionalLight position={[-5, 3, -4]} intensity={3.5} color="#ffffff" />
               <pointLight position={[-5, -5, -5]} intensity={1} />
-              
               <Center>
-                <Headphones scale={4} position={[0, 0, 0]} modelPath="/models/airpods_max.glb" /> 
+                <Headphones scale={4} position={[0, -0.25, 0]} modelPath="/models/airpods_max.glb" /> 
               </Center>
               <OrbitControls enableZoom={false} autoRotate={false} />
             </Canvas>
@@ -179,7 +171,6 @@ export default function Hero() {
                 <span className="block font-['Inter'] text-xs text-neutral-400 leading-normal">Adaptive noise cancellation monitoring surroundings at 48,000Hz.</span>
               </div>
             </div>
-
           </div>
         </div>
 

@@ -11,8 +11,8 @@ const PRODUCTS = [
     price: "$349",
     colorName: "Midnight Black",
     hexColor: "#1A1A1A",
-    modelPath: "/models/aerosound_x.glb", // 👈 ඔයා හදන පළවෙනි මොඩල් එකේ path එක
-    scale: 4.2,                          // 👈 මේ මොඩල් එකට ගැලපෙන scale එක
+    modelPath: "/models/aerosound_x.glb", 
+    scale: 4.2,                  
     position: [0, 0, 0],
     thumb: "/images/black_thumb.png",
     gradient: "from-cyan-500 to-blue-600",
@@ -24,7 +24,7 @@ const PRODUCTS = [
     price: "$299",
     colorName: "Ocean Blue",
     hexColor: "#1E3A8A",
-    modelPath: "/models/aerosound_pro.glb", // 👈 දෙවැනි මොඩල් එක
+    modelPath: "/models/aerosound_pro.glb", 
     scale: 4.0,
     position: [0, -0.05, 0],
     thumb: "/images/blue_thumb.png",
@@ -37,7 +37,7 @@ const PRODUCTS = [
     price: "$199",
     colorName: "Arctic White",
     hexColor: "#E5E7EB",
-    modelPath: "/models/aerosound_lite.glb", // 👈 තුන්වැනි මොඩල් එක
+    modelPath: "/models/aerosound_lite.glb", 
     scale: 4.5,
     position: [0, 0, 0],
     thumb: "/images/white_thumb.png",
@@ -50,7 +50,7 @@ const PRODUCTS = [
     price: "$449",
     colorName: "Sunset Pink",
     hexColor: "#F43F5E",
-    modelPath: "/models/aerosound_ultra.glb", // 👈 හතරවැනි මොඩල් එක
+    modelPath: "/models/aerosound_ultra.glb", 
     scale: 4.2,
     position: [0, 0.05, 0],
     thumb: "/images/pink_thumb.png",
@@ -63,7 +63,7 @@ const PRODUCTS = [
     price: "$249",
     colorName: "Neon Green",
     hexColor: "#22C55E",
-    modelPath: "/models/aerosound_sport.glb", // 👈 පස්වැනි මොඩල් එක
+    modelPath: "/models/aerosound_sport.glb", 
     scale: 4.1,
     position: [0, 0, 0],
     thumb: "/images/green_thumb.png",
@@ -72,7 +72,7 @@ const PRODUCTS = [
   }
 ];
 
-export default function ProductShowcase() {
+export default function ProductShowcase({ onSelectProduct }) {
   const [selectedProduct, setSelectedProduct] = useState(PRODUCTS[0]);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -93,13 +93,9 @@ export default function ProductShowcase() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#0B0B0B] text-white py-20 overflow-hidden font-sans flex flex-col justify-between">
-      
-      {/* BACKGROUND GLOW DYNAMIC */}
       <div className={`absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r ${selectedProduct.gradient} opacity-[0.04] blur-[140px] transition-all duration-1000 rounded-full pointer-events-none`} />
 
       <div className="max-w-[1440px] mx-auto px-6 md:px-24 w-full relative z-10 flex flex-col flex-grow justify-center">
-        
-        {/* 1. DYNAMIC SECTION TITLE */}
         <div className="mb-8">
           <motion.span 
             key={selectedProduct.id + 'label'}
@@ -119,10 +115,7 @@ export default function ProductShowcase() {
           </motion.h2>
         </div>
 
-        {/* 2. TOP ROW: DETAILS & 3D INTERACTIVE CANVAS */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center min-h-[420px]">
-          
-          {/* 👈 LEFT: PRODUCT DETAILS */}
           <div className="lg:col-span-5 z-20">
             <AnimatePresence mode='wait'>
               <motion.div
@@ -148,7 +141,10 @@ export default function ProductShowcase() {
                   <p className="text-gray-400 text-sm leading-relaxed mb-6">
                     {selectedProduct.desc}
                   </p>
-                  <button className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-cyan-400 hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] transition-all duration-300">
+                  <button 
+                    onClick={() => onSelectProduct && onSelectProduct(selectedProduct)}
+                    className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-cyan-400 hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] transition-all duration-300"
+                  >
                     Pre-Order Now
                   </button>
                 </div>
@@ -161,7 +157,6 @@ export default function ProductShowcase() {
             </AnimatePresence>
           </div>
 
-          {/* 🎯 RIGHT: INTERACTIVE 3D CANVAS */}
           <div className="lg:col-span-7 h-[450px] relative">
             <AnimatePresence mode="wait">
               <motion.div
@@ -177,7 +172,6 @@ export default function ProductShowcase() {
                   <directionalLight position={[5, 5, 5]} intensity={2} />
                   <directionalLight position={[-5, 3, -4]} intensity={1.5} color="#ffffff" />
                   <Center>
-                    {/* 💡 key={selectedProduct.id} එක හින්දා කාඩ් මාරු වෙද්දී අලුත් මොඩල් එක ක්ලීන් එකට ලෝඩ් වෙනවා */}
                     <Headphones 
                       key={selectedProduct.id} 
                       scale={selectedProduct.scale} 
@@ -193,10 +187,7 @@ export default function ProductShowcase() {
           </div>
         </div>
 
-        {/* 🎡 3. BOTTOM ROW: THE 3D ARCH STACKED DECK */}
         <div className="relative w-full flex flex-col items-center justify-center mt-12 pt-6">
-          
-          {/* Cards Container */}
           <div className="relative w-full max-w-3xl h-[240px] flex items-center justify-center">
             {PRODUCTS.map((item, index) => {
               let offset = index - activeIndex;
@@ -234,13 +225,11 @@ export default function ProductShowcase() {
                       : 'bg-[#141414]/30 border-white/5 shadow-xl'
                   }`}
                 >
-                  {/* Card Header */}
                   <div className="flex justify-between items-start">
                     <span className="font-mono text-[9px] text-neutral-500 font-bold">0{item.id}</span>
                     <div className="w-2.5 h-2.5 rounded-full border border-white/10" style={{ backgroundColor: item.hexColor }} />
                   </div>
 
-                  {/* Rectangular Image Wrapper */}
                   <div className="my-2 flex-grow flex items-center justify-center relative rounded-lg overflow-hidden bg-white/[0.01] p-2 border border-white/[0.02]">
                     <img 
                       src={item.thumb} 
@@ -250,7 +239,6 @@ export default function ProductShowcase() {
                     />
                   </div>
 
-                  {/* Card Footer */}
                   <div className="flex justify-between items-end">
                     <div className="truncate pr-1">
                       <h4 className={`font-black uppercase text-[10px] tracking-wider truncate ${isActive ? 'text-cyan-400' : 'text-gray-300'}`}>
@@ -264,7 +252,6 @@ export default function ProductShowcase() {
             })}
           </div>
 
-          {/* SKETCH NAVIGATION ARROWS */}
           <div className="flex space-x-4 mt-4 z-30">
             <button 
               onClick={prevSlide}
@@ -279,9 +266,7 @@ export default function ProductShowcase() {
               <span className="text-white group-hover:text-cyan-400 text-sm font-bold transition-colors">→</span>
             </button>
           </div>
-
         </div>
-
       </div>
     </div>
   );
