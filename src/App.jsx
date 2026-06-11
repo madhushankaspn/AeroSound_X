@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Toaster, toast } from 'react-hot-toast'; // Toast එක import කරන්න
 
 // components
 import Hero from "./components/Hero"; 
@@ -15,9 +16,19 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeSection, setActiveSection] = useState('explore'); 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const [isCheckout, setIsCheckout] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false); // Notification state එක
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  
+  // Cart එක localStorage එකෙන් Load කරන්න
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem('cartItems');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // Cart එකට අයිටම් එකතු වුණාම localStorage එකට Save කරන්න
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   // --- Smooth Scroll Logic ---
   const scrollToSection = (id) => {
@@ -27,7 +38,7 @@ export default function App() {
     }
   };
 
-  // --- Active Section Detection (Observer) ---
+  // --- Active Section Detection ---
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,6 +75,9 @@ export default function App() {
       }
       return [...prevItems, { ...product, price: numericPrice, quantity }];
     });
+    
+    // Toast notification එක
+    toast.success('Added to cart!');
     setIsCartOpen(true);
   };
 
@@ -81,36 +95,37 @@ export default function App() {
 
   const removeFromCart = (id) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+    toast.error('Item removed');
   };
 
-  // --- Total Calculation ---
   const subTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
   // --- Render ---
   return (
     <div className="bg-[#0B0B0B] min-h-screen w-full relative">
+      <Toaster position="bottom-right" reverseOrder={false} /> {/* Toast component එක */}
       
       {/* 1. HERO SECTION */}
       <div id="explore">
         <Hero 
           onNavClick={scrollToSection} 
           activeSection={activeSection} 
-          onCartClick={() => setIsCartOpen(true)} // Cart එක Open කරන එක
-          onNotificationClick={() => setIsNotificationsOpen(true)} // Notification එක Open කරන එක
+          onCartClick={() => setIsCartOpen(true)} 
+          onNotificationClick={() => setIsNotificationsOpen(true)} 
         /> 
       </div>
 
-      {/* 2. PRODUCT SHOWCASE SECTION */}
+      {/* 2. PRODUCT SHOWCASE */}
       <div id="collections">
         <ProductShowcase onSelectProduct={setSelectedProduct} />
       </div>
       
-      {/* 3. REVIEWS SECTION */}
+      {/* 3. REVIEWS */}
       <div id="reviews">
         <Reviews />
       </div>
       
-      {/* 4. PRODUCT DETAIL OVERLAY */}
+      {/* 4. PRODUCT DETAIL */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div 
@@ -142,7 +157,7 @@ export default function App() {
         }}
       />
 
-      {/* 6. CHECKOUT SCREEN */}
+      {/* 6. CHECKOUT */}
       {isCheckout && (
         <div className="fixed inset-0 z-50 bg-[#070707] overflow-y-auto">
           <Checkout 
@@ -156,7 +171,7 @@ export default function App() {
         </div>
       )}
 
-      {/* 7. NOTIFICATION SCREEN */}
+      {/* 7. NOTIFICATIONS */}
       {isNotificationsOpen && (
         <div className="fixed inset-0 z-50 bg-[#070707] overflow-y-auto">
           <Notifications onBack={() => setIsNotificationsOpen(false)} />
