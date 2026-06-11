@@ -1,16 +1,21 @@
-# React + Vite
+# 🎧 AeroSound X — Interactive 3D Audio Storefront
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium, fully interactive 3D audio e-commerce storefront built to break the boundaries of traditional 2D web layouts.
 
-Currently, two official plugins are available:
+<img width="1672" height="941" alt="ChatGPT Image Jun 11, 2026, 07_22_54 PM" src="https://github.com/user-attachments/assets/9bd5a3e9-e80b-4097-a7ea-9d2ae02d6fed" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔥 Key Features
+* **Interactive 3D Gateway:** Login portal that tilts with real-time mouse tracking and flashes a red glitch effect on errors.
+* **Product Exploration:** Immersive 3D headphone showcase with fluid transition states.
+* **Glassmorphic UI:** Premium, high-blur modern design built using Tailwind CSS.
+
+## 🛠️ Tech Stack & Assets
+* **Core:** React, React Three Fiber (Three.js), Framer Motion
+* **Styling:** Tailwind CSS
+* **3D Models:** Sourced from **Sketchfab**
+
