@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// components
 import Hero from "./components/Hero"; 
 import ProductShowcase from "./components/ProductShowcase";
 import ProductDetail from "./components/ProductDetail";
 import Reviews from "./components/Reviews";
+import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
 
 export default function App() {
+  // --- States ---
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [activeSection, setActiveSection] = useState('explore'); // දැනට ඉන්න සෙක්ෂන් එක බලාගන්න
+  const [activeSection, setActiveSection] = useState('explore'); 
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [isCheckout, setIsCheckout] = useState(false);
+  
 
-  // 💡 ස්මූත් එකේ ස්ක්‍රෝල් වෙන ලොජික් එක
+  // --- Smooth Scroll Logic ---
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -17,7 +26,7 @@ export default function App() {
     }
   };
 
-  // 🔄 ස්ක්‍රෝල් කරනකොට දැනට ඉන්න තැන ඉබේම අල්ලගන්නා ලොජික් එක
+  // --- Active Section Detection (Observer) ---
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -27,7 +36,7 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.5 } // සෙක්ෂන් එකෙන් 50%ක් තිරේට ආවම underline එක මාරු වෙනවා
+      { threshold: 0.5 }
     );
 
     const sections = ['explore', 'collections', 'reviews'];
@@ -39,25 +48,64 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  // --- Cart Functions ---
+  const addToCart = (product, quantity = 1) => {
+    // Price එක Number එකක් බව තහවුරු කරගන්න (Fix for currency string)
+    const numericPrice = typeof product.price === 'string' 
+      ? parseFloat(product.price.replace(/[^0-9.]/g, '')) 
+      : product.price;
+
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map(item => 
+          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+        );
+      }
+      return [...prevItems, { ...product, price: numericPrice, quantity }];
+    });
+    setIsCartOpen(true);
+  };
+
+  const updateQuantity = (id, change) => {
+    setCartItems(prevItems => 
+      prevItems.map(item => {
+        if (item.id === id) {
+          const newQuantity = item.quantity + change;
+          return { ...item, quantity: newQuantity > 0 ? newQuantity : 1 };
+        }
+        return item;
+      })
+    );
+  };
+
+  const removeFromCart = (id) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
+
+  // --- Total Calculation ---
+  const subTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+  // --- Render ---
   return (
     <div className="bg-[#0B0B0B] min-h-screen w-full relative">
       
-      {/* 1. HERO SECTION (id="explore" ඇටෑච් කරා) */}
+      {/* 1. HERO SECTION */}
       <div id="explore">
         <Hero onNavClick={scrollToSection} activeSection={activeSection} /> 
       </div>
 
-      {/* 2. PRODUCT SHOWCASE SECTION (id="collections" ඇටෑච් කරා) */}
+      {/* 2. PRODUCT SHOWCASE SECTION */}
       <div id="collections">
         <ProductShowcase onSelectProduct={setSelectedProduct} />
       </div>
       
-      {/* 3. REVIEWS SECTION (id="reviews" ඇටෑච් කරා) */}
-     <div id="reviews">
+      {/* 3. REVIEWS SECTION */}
+      <div id="reviews">
         <Reviews />
       </div>
       
-      {/* 3D Detail Panel */}
+      {/* 4. PRODUCT DETAIL OVERLAY */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div 
@@ -65,12 +113,43 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '30%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 200 }}
-            className="fixed inset-0 z-50 overflow-y-auto bg-[#070707]"
+            className="fixed inset-0 z-40 overflow-y-auto bg-[#070707]"
           >
-            <ProductDetail product={selectedProduct} onBack={() => setSelectedProduct(null)} />
+            <ProductDetail 
+              product={selectedProduct} 
+              onBack={() => setSelectedProduct(null)} 
+              addToCart={addToCart} 
+            />
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 5. CART DRAWER */}
+      <Cart 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        cartItems={cartItems}
+        updateQuantity={updateQuantity}
+        removeFromCart={removeFromCart}
+        onCheckout={() => { 
+          setIsCartOpen(false); 
+          setIsCheckout(true); 
+        }}
+      />
+
+      {/* 6. CHECKOUT SCREEN */}
+      {isCheckout && (
+     <div className="fixed inset-0 z-50 bg-[#070707] overflow-y-auto">
+    <Checkout 
+      cartItems={cartItems} 
+      subTotal={subTotal} 
+      onBack={() => { 
+        setIsCheckout(false);      // Checkout පේජ් එක වහනවා
+        scrollToSection('collections'); // Collections වලට scroll කරනවා
+      }} 
+    />
+  </div>
+      )}
 
     </div>
   );
