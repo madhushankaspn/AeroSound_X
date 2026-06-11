@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Center, useProgress } from '@react-three/drei'; 
 import { Headphones } from './Headphones'; 
 
-export default function Hero({ onNavClick, activeSection }) {
+export default function Hero({ onNavClick, activeSection, onCartClick, onNotificationClick }) {
   const { progress: actualProgress } = useProgress();
   const [visualProgress, setVisualProgress] = useState(0);
   const [showLoader, setShowLoader] = useState(true);
@@ -72,65 +72,41 @@ export default function Hero({ onNavClick, activeSection }) {
 
       {/* TopNavBar */}
       <nav className="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/5">
-        <div className="flex justify-between items-center px-12 md:px-24 py-4 max-w-[1440px] mx-auto h-20">
-          
-          {/* LOGO */}
-          <div className="font-['Montserrat'] text-2xl font-black tracking-tighter uppercase text-white cursor-pointer" onClick={() => onNavClick('explore')}>
-            AeroSound X
-          </div>
-          
-          {/* ─── 💡 ACTIVE UNDERLINE NAV LINKS START ─── */}
-          <div className="hidden md:flex items-center space-x-12 font-['Inter'] text-xs font-semibold uppercase tracking-widest">
-            
-            {/* 1. EXPLORE LINK */}
-            <button 
-              onClick={() => onNavClick('explore')}
-              className={`pb-1 transition-all duration-300 cursor-pointer ${
-                activeSection === 'explore' 
-                  ? 'text-white border-b-2 border-cyan-400' 
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              Explore
-            </button>
-            
-            {/* 2. COLLECTIONS LINK */}
-            <button 
-              onClick={() => onNavClick('collections')}
-              className={`pb-1 transition-all duration-300 cursor-pointer ${
-                activeSection === 'collections' 
-                  ? 'text-white border-b-2 border-cyan-400' 
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              Collections
-            </button>
-            
-            {/* 3. REVIEWS LINK */}
-            <button 
-              onClick={() => onNavClick('reviews')}
-              className={`pb-1 transition-all duration-300 cursor-pointer ${
-                activeSection === 'reviews' 
-                  ? 'text-white border-b-2 border-cyan-400' 
-                  : 'text-white/60 hover:text-white'
-              }`}
-            >
-              Reviews
-            </button>
-            
-          </div>
-          {/* ─── ACTIVE UNDERLINE NAV LINKS END ─── */}
+      <div className="flex justify-between items-center px-12 md:px-24 py-4 max-w-[1440px] mx-auto h-20">
+        
+        {/* LOGO */}
+        <div className="font-['Montserrat'] text-2xl font-black tracking-tighter uppercase text-white cursor-pointer" onClick={() => onNavClick('explore')}>
+          AeroSound X
+        </div>
+        
+        {/* ─── ACTIVE UNDERLINE NAV LINKS ─── */}
+        <div className="hidden md:flex items-center space-x-12 font-['Inter'] text-xs font-semibold uppercase tracking-widest">
+          <button onClick={() => onNavClick('explore')} className={`pb-1 transition-all duration-300 cursor-pointer ${activeSection === 'explore' ? 'text-white border-b-2 border-cyan-400' : 'text-white/60 hover:text-white'}`}>Explore</button>
+          <button onClick={() => onNavClick('collections')} className={`pb-1 transition-all duration-300 cursor-pointer ${activeSection === 'collections' ? 'text-white border-b-2 border-cyan-400' : 'text-white/60 hover:text-white'}`}>Collections</button>
+          <button onClick={() => onNavClick('reviews')} className={`pb-1 transition-all duration-300 cursor-pointer ${activeSection === 'reviews' ? 'text-white border-b-2 border-cyan-400' : 'text-white/60 hover:text-white'}`}>Reviews</button>
+        </div>
 
-          {/* NAVBAR PRE-ORDER BUTTON */}
-          <button 
-            onClick={() => onNavClick('collections')}
-            className="bg-white text-black px-8 py-3 font-['Inter'] text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300 rounded-full electric-glow"
-          >
-            Pre-Order
+        {/* ─── ICONS & PRE-ORDER ─── */}
+        <div className="flex items-center gap-6">
+          
+          {/* Notification Icon */}
+          <button onClick={onNotificationClick} className="text-white/60 hover:text-cyan-400 transition-colors">
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
           </button>
 
+          {/* Cart Icon */}
+          <button onClick={onCartClick} className="text-white/60 hover:text-cyan-400 transition-colors">
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </button>
+
+          {/* Pre-Order Button */}
+          <button onClick={() => onNavClick('collections')} className="bg-white text-black px-8 py-3 font-['Inter'] text-xs font-bold uppercase tracking-widest hover:scale-105 transition-all duration-300 rounded-full electric-glow">
+            Pre-Order
+          </button>
         </div>
-      </nav>
+
+      </div>
+    </nav>
 
       {/* Ambient Radial Glow */}
       <div className="absolute inset-0 pointer-events-none neon-radial-glow z-0"></div>
@@ -220,6 +196,7 @@ export default function Hero({ onNavClick, activeSection }) {
           <span className="font-['Inter'] text-[10px] font-bold tracking-[0.2em] text-white uppercase">Aero-001-X-Series</span>
           <span className="font-['Inter'] text-[9px] text-neutral-400 tracking-widest">48.2343° N, 16.3731° E</span>
         </div>
+        
 
       </div>
     </div>

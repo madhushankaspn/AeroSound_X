@@ -8,6 +8,7 @@ import ProductDetail from "./components/ProductDetail";
 import Reviews from "./components/Reviews";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
+import Notifications from "./components/Notifications";
 
 export default function App() {
   // --- States ---
@@ -16,7 +17,7 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [isCheckout, setIsCheckout] = useState(false);
-  
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false); // Notification state එක
 
   // --- Smooth Scroll Logic ---
   const scrollToSection = (id) => {
@@ -50,7 +51,6 @@ export default function App() {
 
   // --- Cart Functions ---
   const addToCart = (product, quantity = 1) => {
-    // Price එක Number එකක් බව තහවුරු කරගන්න (Fix for currency string)
     const numericPrice = typeof product.price === 'string' 
       ? parseFloat(product.price.replace(/[^0-9.]/g, '')) 
       : product.price;
@@ -92,7 +92,12 @@ export default function App() {
       
       {/* 1. HERO SECTION */}
       <div id="explore">
-        <Hero onNavClick={scrollToSection} activeSection={activeSection} /> 
+        <Hero 
+          onNavClick={scrollToSection} 
+          activeSection={activeSection} 
+          onCartClick={() => setIsCartOpen(true)} // Cart එක Open කරන එක
+          onNotificationClick={() => setIsNotificationsOpen(true)} // Notification එක Open කරන එක
+        /> 
       </div>
 
       {/* 2. PRODUCT SHOWCASE SECTION */}
@@ -139,16 +144,23 @@ export default function App() {
 
       {/* 6. CHECKOUT SCREEN */}
       {isCheckout && (
-     <div className="fixed inset-0 z-50 bg-[#070707] overflow-y-auto">
-    <Checkout 
-      cartItems={cartItems} 
-      subTotal={subTotal} 
-      onBack={() => { 
-        setIsCheckout(false);      // Checkout පේජ් එක වහනවා
-        scrollToSection('collections'); // Collections වලට scroll කරනවා
-      }} 
-    />
-  </div>
+        <div className="fixed inset-0 z-50 bg-[#070707] overflow-y-auto">
+          <Checkout 
+            cartItems={cartItems} 
+            subTotal={subTotal} 
+            onBack={() => { 
+              setIsCheckout(false); 
+              scrollToSection('collections'); 
+            }} 
+          />
+        </div>
+      )}
+
+      {/* 7. NOTIFICATION SCREEN */}
+      {isNotificationsOpen && (
+        <div className="fixed inset-0 z-50 bg-[#070707] overflow-y-auto">
+          <Notifications onBack={() => setIsNotificationsOpen(false)} />
+        </div>
       )}
 
     </div>
