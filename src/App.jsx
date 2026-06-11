@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Toaster, toast } from 'react-hot-toast'; // Toast එක import කරන්න
+import { Toaster, toast } from 'react-hot-toast';
 
-// components
+import Login from "./components/Login"; // අලුතින් හදපු ලොගින් පේජ් එක
 import Hero from "./components/Hero"; 
 import ProductShowcase from "./components/ProductShowcase";
 import ProductDetail from "./components/ProductDetail";
@@ -12,25 +12,25 @@ import Checkout from "./components/Checkout";
 import Notifications from "./components/Notifications";
 
 export default function App() {
-  // --- States ---
+  // --- Auth State ---
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // මුලින්ම ලොග් වෙලා නෑ කියලා තියන්නේ
+
+  // --- App States ---
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeSection, setActiveSection] = useState('explore'); 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckout, setIsCheckout] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   
-  // Cart එක localStorage එකෙන් Load කරන්න
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem('cartItems');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Cart එකට අයිටම් එකතු වුණාම localStorage එකට Save කරන්න
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // --- Smooth Scroll Logic ---
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -38,7 +38,6 @@ export default function App() {
     }
   };
 
-  // --- Active Section Detection ---
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -76,7 +75,6 @@ export default function App() {
       return [...prevItems, { ...product, price: numericPrice, quantity }];
     });
     
-    // Toast notification එක
     toast.success('Added to cart!');
     setIsCartOpen(true);
   };
@@ -100,10 +98,20 @@ export default function App() {
 
   const subTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
-  // --- Render ---
+  // --- Authentication Check (ලොග් වෙලා නැත්නම් ලොගින් එක පෙන්වන්න) ---
+  if (!isLoggedIn) {
+    return (
+      <>
+        <Toaster position="bottom-right" reverseOrder={false} />
+        <Login onLoginSuccess={() => setIsLoggedIn(true)} />
+      </>
+    );
+  }
+
+  // --- Render Main App (ලොග් වුණාට පස්සේ) ---
   return (
     <div className="bg-[#0B0B0B] min-h-screen w-full relative">
-      <Toaster position="bottom-right" reverseOrder={false} /> {/* Toast component එක */}
+      <Toaster position="bottom-right" reverseOrder={false} /> 
       
       {/* 1. HERO SECTION */}
       <div id="explore">

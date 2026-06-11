@@ -12,7 +12,7 @@ const PRODUCTS = [
     colorName: "Midnight Black",
     hexColor: "#1A1A1A",
     modelPath: "/models/aerosound_x.glb", 
-    scale: 4.2,                  
+    scale: 0.5,                  
     position: [0, 0, 0],
     thumb: "/images/black_thumb.png",
     gradient: "from-cyan-500 to-blue-600",
@@ -25,7 +25,7 @@ const PRODUCTS = [
     colorName: "Ocean Blue",
     hexColor: "#1E3A8A",
     modelPath: "/models/aerosound_pro.glb", 
-    scale: 4.0,
+    scale: 3.5,
     position: [0, -0.05, 0],
     thumb: "/images/blue_thumb.png",
     gradient: "from-blue-500 to-indigo-600",
@@ -51,7 +51,7 @@ const PRODUCTS = [
     colorName: "Sunset Pink",
     hexColor: "#F43F5E",
     modelPath: "/models/aerosound_ultra.glb", 
-    scale: 4.2,
+    scale: 0.1,
     position: [0, 0.05, 0],
     thumb: "/images/pink_thumb.png",
     gradient: "from-rose-500 to-orange-500",
@@ -64,7 +64,7 @@ const PRODUCTS = [
     colorName: "Neon Green",
     hexColor: "#22C55E",
     modelPath: "/models/aerosound_sport.glb", 
-    scale: 4.1,
+    scale: 0.1,
     position: [0, 0, 0],
     thumb: "/images/green_thumb.png",
     gradient: "from-green-400 to-teal-600",
@@ -73,10 +73,10 @@ const PRODUCTS = [
 ];
 
 export default function ProductShowcase({ onSelectProduct }) {
-  // 💡 Search State එක අලුතින් එකතු කළා
+ 
   const [searchTerm, setSearchTerm] = useState('');
   
-  // 💡 Filter Logic එක: Search කරන දේට ගැළපෙන ඒවා විතරක් ගන්නවා
+
   const filteredProducts = PRODUCTS.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.colorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -86,7 +86,7 @@ export default function ProductShowcase({ onSelectProduct }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(filteredProducts[0]);
 
-  // 💡 Search කරද්දි List එක වෙනස් වෙන නිසා, ඉබේම පළවෙනි එකට Reset වෙන්න හදන Effect එක
+ 
   useEffect(() => {
     setActiveIndex(0);
     if (filteredProducts.length > 0) {
@@ -329,7 +329,7 @@ export default function ProductShowcase({ onSelectProduct }) {
             </div>
           </>
         ) : (
-          /* 🚫 EMPTY STATE (සර්ච් කරලා මුකුත් හම්බුණේ නැත්තම් මේක පෙන්නනවා) */
+         
           <div className="flex flex-col items-center justify-center min-h-[400px] opacity-50 z-20">
             <svg className="w-20 h-20 text-cyan-400 mb-6 drop-shadow-[0_0_15px_rgba(34,211,238,0.4)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>

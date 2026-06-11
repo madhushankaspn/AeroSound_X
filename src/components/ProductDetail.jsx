@@ -10,28 +10,27 @@ const COLOR_OPTIONS = [
   { id: 'crimson', name: 'Crimson Volt', hex: '#ef4444', meshColor: '#ef4444' },
 ];
 
-// 💡 props විදිහට product එකයි, addToCart එකයි ගත්තා
 export default function ProductDetail({ product, onBack, addToCart }) {
   const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0]);
   const [quantity, setQuantity] = useState(1);
 
-  // ආරක්ෂාවට Product එකක් නැත්තම් Default එකක් දානවා (එහෙම වෙන්නේ නෑ කොහොමත්)
   const currentProduct = product || {
     id: 'default',
     name: 'AeroSound X-1',
     price: '$299.00',
     desc: 'Experience pure auditory bliss with hybrid active noise cancellation, bio-cellulose drivers, and up to 60 hours of uncompromised wireless playback.',
-    thumb: '/images/blue_thumb.png' 
+    thumb: '/images/blue_thumb.png',
+    scale: 2.5 
   };
 
   return (
     <div className="min-h-screen bg-[#070707] text-white flex flex-col md:flex-row items-center justify-center p-6 md:p-12 gap-8 pt-24 relative">
       <button 
-  onClick={onBack} // 👈 මෙතන තමයි වැදගත්ම දේ!
-  className="flex items-center text-neutral-500 hover:text-white transition-colors mb-8"
->
-  ← BACK TO SHOP
-</button>
+        onClick={onBack} 
+        className="flex items-center text-neutral-500 hover:text-white transition-colors mb-8"
+      >
+        ← BACK TO SHOP
+      </button>
       
       <div className="w-full md:w-1/2 h-[50vh] md:h-[70vh] relative bg-gradient-to-b from-neutral-900/20 to-transparent rounded-3xl border border-white/5">
         <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
@@ -42,10 +41,11 @@ export default function ProductDetail({ product, onBack, addToCart }) {
           
           <Suspense fallback={null}>
             <Center>
-              {/* Product එකේ model path එකයි color එකයි පාස් කරනවා */}
+              {}
               <Headphones 
                 modelPath={currentProduct.modelPath}
                 customColor={selectedColor.meshColor} 
+                scale={currentProduct.scale || 2.5} 
               />
             </Center>
           </Suspense>
@@ -64,12 +64,9 @@ export default function ProductDetail({ product, onBack, addToCart }) {
 
       <div className="w-full md:w-1/2 flex flex-col max-w-md">
         <span className="text-cyan-400 font-mono text-xs tracking-[0.3em] uppercase mb-2">AERO SERIES</span>
-        {/* 💡 තෝරපු Product එකේ නම */}
         <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 uppercase">{currentProduct.name}</h1>
-        {/* 💡 තෝරපු Product එකේ ගාණ */}
         <p className="text-2xl font-mono text-neutral-300 mb-6">{currentProduct.price}</p>
         
-        {/* 💡 තෝරපු Product එකේ විස්තරේ */}
         <p className="text-sm text-neutral-400 leading-relaxed mb-8">
           {currentProduct.desc}
         </p>
@@ -130,7 +127,7 @@ export default function ProductDetail({ product, onBack, addToCart }) {
 
           <motion.button 
             whileTap={{ scale: 0.98 }}
-            onClick={() => addToCart(currentProduct, quantity)} // 🛒 Add to cart ෆන්ක්ෂන් එක ට්‍රිගර් වෙනවා
+            onClick={() => addToCart(currentProduct, quantity)} 
             className="flex-1 h-14 bg-white text-black font-bold rounded-xl tracking-wide uppercase hover:bg-neutral-200 transition-colors shadow-lg shadow-white/5 text-sm"
           >
             Add to Cart

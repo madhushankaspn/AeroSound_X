@@ -3,14 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Cart({ isOpen, onClose, cartItems, updateQuantity, removeFromCart, onCheckout }) {
   
-  // 💰 Subtotal එක හදන එක (Price එක දැන් Number එකක් නිසා කිසිම කරදරයක් නෑ)
+  
   const subTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop (පිටිපස්සෙන් එන කළු පාට ලේයර් එක) */}
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -19,7 +19,7 @@ export default function Cart({ isOpen, onClose, cartItems, updateQuantity, remov
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 cursor-pointer"
           />
 
-          {/* Cart Drawer එක */}
+          {}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}

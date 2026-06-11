@@ -38,7 +38,7 @@ export default function Checkout({ cartItems, subTotal, onBack }) {
           </div>
         </div>
 
-        {/* දකුණු පැත්ත: Summary */}
+        {}
         <div className="bg-white/5 p-8 rounded-2xl border border-white/10 h-fit">
           <h3 className="font-bold mb-6">Order Summary</h3>
           <div className="space-y-4 mb-8">
