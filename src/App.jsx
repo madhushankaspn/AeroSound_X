@@ -1,32 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Hero from "./components/Hero"; // ඔයාගේම සුපිරි ඔරිජිනල් Hero එක
+import Hero from "./components/Hero"; 
 import ProductShowcase from "./components/ProductShowcase";
 import ProductDetail from "./components/ProductDetail";
+import Reviews from "./components/Reviews";
 
 export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [activeSection, setActiveSection] = useState('explore'); // දැනට ඉන්න සෙක්ෂන් එක බලාගන්න
 
-  // 💡 බටන් එක එබුවාම Product Showcase එක තියෙන තැනට ස්මූත් එකේ Scroll වෙන ලොජික් එක
-  const scrollToProducts = () => {
-    const element = document.getElementById('product-showcase-section');
+  // 💡 ස්මූත් එකේ ස්ක්‍රෝල් වෙන ලොජික් එක
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  // 🔄 ස්ක්‍රෝල් කරනකොට දැනට ඉන්න තැන ඉබේම අල්ලගන්නා ලොජික් එක
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.5 } // සෙක්ෂන් එකෙන් 50%ක් තිරේට ආවම underline එක මාරු වෙනවා
+    );
+
+    const sections = ['explore', 'collections', 'reviews'];
+    sections.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="bg-[#0B0B0B] min-h-screen w-full relative">
       
-      {/* 1. ඔයාගේ ඔරිජිනල් Hero එක (බටන් ෆන්ක්ෂන් එක Prop එකක් විදිහට යැව්වා) */}
-      <Hero onPreOrderClick={scrollToProducts} /> 
+      {/* 1. HERO SECTION (id="explore" ඇටෑච් කරා) */}
+      <div id="explore">
+        <Hero onNavClick={scrollToSection} activeSection={activeSection} /> 
+      </div>
 
-      {/* 2. Product Showcase එක (id එකක් ඇටෑච් කරා Scroll එක අල්ලගන්න) */}
-      <div id="product-showcase-section">
+      {/* 2. PRODUCT SHOWCASE SECTION (id="collections" ඇටෑච් කරා) */}
+      <div id="collections">
         <ProductShowcase onSelectProduct={setSelectedProduct} />
       </div>
       
-      {/* 3. Showcase එකේ "Pre-Order Now" ක්ලික් කරාම විතරක් උඩින් ලෝඩ් වෙන 3D Detail පේජ් එක */}
+      {/* 3. REVIEWS SECTION (id="reviews" ඇටෑච් කරා) */}
+     <div id="reviews">
+        <Reviews />
+      </div>
+      
+      {/* 3D Detail Panel */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div 
